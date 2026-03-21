@@ -113,12 +113,14 @@ export default function ThomassonDetailPage() {
                 <tr>
                   <th>Category</th>
                   <td>
-                    <span
-                      className="category-badge"
-                      style={{ backgroundColor: category.color }}
-                    >
-                      {category.label}
-                    </span>
+                    <Link to={`/categories#${thomasson.category}`} className="category-badge-link">
+                      <span
+                        className="category-badge"
+                        style={{ backgroundColor: category.color }}
+                      >
+                        {category.label}
+                      </span>
+                    </Link>
                   </td>
                 </tr>
                 {thomasson.submitted_by_username && (

@@ -16,14 +16,20 @@ class ThomassonStatus(str, enum.Enum):
 
 
 THOMASSON_CATEGORIES = [
-    "staircase",
-    "door",
-    "bridge",
-    "wall",
-    "pipe",
-    "window",
-    "platform",
-    "other",
+    "pure",
+    "pure_staircase",
+    "useless_doorway",
+    "hisashi",
+    "useless_window",
+    "a_bomb",
+    "elevated",
+    "outie",
+    "castella",
+    "atago",
+    "live_burial",
+    "abe_sada",
+    "useless_bridge",
+    "uncategorized",
 ]
 
 

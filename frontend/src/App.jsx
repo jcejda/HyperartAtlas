@@ -12,6 +12,7 @@ import ThomassonDetailPage from './pages/ThomassonDetailPage';
 import MySubmissionsPage from './pages/MySubmissionsPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
+import CategoriesPage from './pages/CategoriesPage';
 import AdminDashboard from './pages/AdminDashboard';
 import './App.css';
 
@@ -27,6 +28,7 @@ export default function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignupPage />} />
               <Route path="/about" element={<AboutPage />} />
+              <Route path="/categories" element={<CategoriesPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/thomasson/:id" element={<ThomassonDetailPage />} />
               <Route path="/submit" element={<SubmitPage />} />
