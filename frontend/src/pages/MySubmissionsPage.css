@@ -1,0 +1,79 @@
+.my-submissions-page h1 {
+  margin-bottom: 1rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--color-text-secondary);
+}
+
+.empty-state p {
+  margin-bottom: 1rem;
+}
+
+.submissions-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.submissions-table th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--color-text-secondary);
+  padding: 0.5rem 0.75rem;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.submissions-table td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--color-border-light);
+  vertical-align: middle;
+}
+
+.submissions-table tbody tr:hover {
+  background: var(--color-bg-secondary);
+}
+
+.submission-title-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.submission-thumb {
+  width: 36px;
+  height: 36px;
+  border-radius: 2px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid var(--color-border-light);
+}
+
+.submission-date {
+  color: var(--color-text-secondary);
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+
+.view-link {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .submissions-table th:nth-child(4),
+  .submissions-table td:nth-child(4) {
+    display: none;
+  }
+
+  .submissions-table th,
+  .submissions-table td {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+}
