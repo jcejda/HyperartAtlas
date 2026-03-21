@@ -46,6 +46,9 @@ export default function MapView() {
       <MapContainer
         center={[20, 0]}
         zoom={2}
+        minZoom={1}
+        maxBounds={[[-85, -180], [85, 180]]}
+        maxBoundsViscosity={1.0}
         className="map-container"
         scrollWheelZoom={true}
         zoomControl={true}
@@ -53,6 +56,7 @@ export default function MapView() {
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          noWrap={true}
         />
         {thomassons.map((t) => (
           <ThomassonMarker key={t.id} thomasson={t} />

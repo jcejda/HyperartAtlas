@@ -49,7 +49,7 @@ export default function Header() {
           </div>
 
           <div className="nav-auth">
-            <NavLink to="/about" onClick={closeMenu}>
+            <NavLink to="/about" className="nav-link-right" onClick={closeMenu}>
               About Thomassons
             </NavLink>
             {user ? (
