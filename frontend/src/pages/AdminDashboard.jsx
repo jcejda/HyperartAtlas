@@ -185,7 +185,7 @@ export default function AdminDashboard() {
                             {detail.photos.map((photo, i) => (
                               <img
                                 key={i}
-                                src={photo.url || photo}
+                                src={photo.file_url || photo}
                                 alt={`Photo ${i + 1}`}
                                 className="admin-photo"
                               />

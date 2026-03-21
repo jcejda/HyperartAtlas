@@ -74,7 +74,7 @@ export default function ThomassonDetailPage() {
             <div className="detail-gallery">
               <div className="gallery-main">
                 <img
-                  src={photos[selectedPhoto]?.url || photos[selectedPhoto]}
+                  src={photos[selectedPhoto]?.file_url || photos[selectedPhoto]}
                   alt={`${title} - photo ${selectedPhoto + 1}`}
                 />
               </div>
@@ -87,7 +87,7 @@ export default function ThomassonDetailPage() {
                       onClick={() => setSelectedPhoto(i)}
                     >
                       <img
-                        src={photo.url || photo}
+                        src={photo.file_url || photo}
                         alt={`Thumbnail ${i + 1}`}
                       />
                     </button>
@@ -129,7 +129,7 @@ export default function ThomassonDetailPage() {
                 )}
                 {date && (
                   <tr>
-                    <th>Date</th>
+                    <th>Date Cataloged</th>
                     <td>{date}</td>
                   </tr>
                 )}
@@ -146,9 +146,9 @@ export default function ThomassonDetailPage() {
                 center={[thomasson.latitude, thomasson.longitude]}
                 zoom={15}
                 className="infobox-map-container"
-                scrollWheelZoom={false}
-                dragging={false}
-                zoomControl={false}
+                scrollWheelZoom={true}
+                dragging={true}
+                zoomControl={true}
                 attributionControl={false}
               >
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
