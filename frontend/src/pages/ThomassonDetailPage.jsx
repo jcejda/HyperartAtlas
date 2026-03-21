@@ -123,10 +123,10 @@ export default function ThomassonDetailPage() {
                     </Link>
                   </td>
                 </tr>
-                {thomasson.submitted_by_username && (
+                {thomasson.submitter_username && (
                   <tr>
                     <th>Submitted by</th>
-                    <td>{thomasson.submitted_by_username}</td>
+                    <td>{thomasson.submitter_username}</td>
                   </tr>
                 )}
                 {date && (
