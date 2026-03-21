@@ -16,6 +16,19 @@ function LocationPicker({ position, setPosition }) {
   return position ? <Marker position={position} /> : null;
 }
 
+function SubmitPageLogin() {
+  return (
+    <div className="submit-page content-container">
+      <h1>Submit a Thomasson</h1>
+      <p>You need to be logged in to submit a Thomasson sighting.</p>
+      <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem' }}>
+        <Link to="/login" className="btn btn-primary">Log in</Link>
+        <Link to="/signup" className="btn">Sign up</Link>
+      </div>
+    </div>
+  );
+}
+
 export default function SubmitPage() {
   const { user } = useAuth();
 

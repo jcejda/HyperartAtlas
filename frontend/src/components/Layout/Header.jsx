@@ -1,14 +1,21 @@
 import { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import './Header.css';
 
 export default function Header() {
   const { user, logout, isModerator } = useAuth();
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const toggleMenu = () => setMenuOpen((prev) => !prev);
   const closeMenu = () => setMenuOpen(false);
+
+  const handleLogout = () => {
+    logout();
+    closeMenu();
+    navigate('/');
+  };
 
   return (
     <header className="header">
@@ -55,7 +62,7 @@ export default function Header() {
             {user ? (
               <>
                 <span className="nav-username">{user.username}</span>
-                <button className="btn btn-logout" onClick={() => { logout(); closeMenu(); }}>
+                <button className="btn btn-logout" onClick={handleLogout}>
                   Log out
                 </button>
               </>
