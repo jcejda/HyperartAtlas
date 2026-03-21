@@ -29,8 +29,8 @@ export default function ThomassonCard({ thomasson }) {
           {category.label}
         </span>
         <div className="thomasson-card-meta">
-          {thomasson.submitted_by_username && (
-            <span className="meta-user">by {thomasson.submitted_by_username}</span>
+          {thomasson.username && (
+            <span className="meta-user">by {thomasson.username}</span>
           )}
           {date && <span className="meta-date">{date}</span>}
         </div>
