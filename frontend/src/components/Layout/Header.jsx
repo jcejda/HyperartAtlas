@@ -59,6 +59,9 @@ export default function Header() {
             <NavLink to="/about" className="nav-link-right" onClick={closeMenu}>
               About Thomassons
             </NavLink>
+            <NavLink to="/categories" className="nav-link-right" onClick={closeMenu}>
+              Thomasson Categories
+            </NavLink>
             {user ? (
               <>
                 <span className="nav-username">{user.username}</span>

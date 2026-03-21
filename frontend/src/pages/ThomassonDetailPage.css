@@ -1,3 +1,11 @@
+.category-badge-link {
+  text-decoration: none;
+}
+
+.category-badge-link:hover .category-badge {
+  opacity: 0.85;
+}
+
 .detail-breadcrumb {
   font-size: 0.8rem;
   color: var(--color-text-secondary);
