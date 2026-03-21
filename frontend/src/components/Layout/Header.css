@@ -93,6 +93,33 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  height: 100%;
+}
+
+.nav-link-right {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 0.75rem;
+  font-size: 0.85rem;
+  color: var(--color-text);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.15s;
+}
+
+.nav-link-right:visited {
+  color: var(--color-text);
+}
+
+.nav-link-right:hover {
+  text-decoration: none;
+  background: var(--color-bg-tertiary);
+}
+
+.nav-link-right.active {
+  border-bottom-color: var(--color-link);
+  color: var(--color-link);
 }
 
 .nav-username {

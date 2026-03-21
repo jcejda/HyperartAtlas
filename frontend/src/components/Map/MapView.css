@@ -10,6 +10,11 @@
   width: 100%;
   min-height: 400px;
   z-index: 1;
+  background: #ffffff !important;
+}
+
+.map-container .leaflet-container {
+  background: #ffffff !important;
 }
 
 .map-loading-overlay {
