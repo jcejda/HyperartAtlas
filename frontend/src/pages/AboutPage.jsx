@@ -29,7 +29,7 @@ export default function AboutPage() {
 
       <section className="about-intro">
         <p>
-          A <strong>Thomasson</strong> is a type of useless architectural relic -- a structure or
+          A <a href="https://en.wikipedia.org/wiki/Hyperart_Thomasson" target="_blank" rel="noopener noreferrer"><strong>Thomasson</strong></a> is a type of useless architectural relic -- a structure or
           part of a structure that has been maintained but serves no purpose. The concept was
           identified and named by Japanese artist Genpei Akasegawa in the early 1980s.
         </p>

@@ -29,14 +29,7 @@ export default function App() {
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/thomasson/:id" element={<ThomassonDetailPage />} />
-              <Route
-                path="/submit"
-                element={
-                  <ProtectedRoute>
-                    <SubmitPage />
-                  </ProtectedRoute>
-                }
-              />
+              <Route path="/submit" element={<SubmitPage />} />
               <Route
                 path="/my-submissions"
                 element={

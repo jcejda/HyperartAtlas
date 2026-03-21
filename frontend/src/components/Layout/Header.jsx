@@ -33,17 +33,9 @@ export default function Header() {
             <NavLink to="/" end onClick={closeMenu}>
               Map
             </NavLink>
-            <NavLink to="/about" onClick={closeMenu}>
-              About
+            <NavLink to="/submit" onClick={closeMenu}>
+              Submit a Thomasson
             </NavLink>
-            <NavLink to="/contact" onClick={closeMenu}>
-              Contact
-            </NavLink>
-            {user && (
-              <NavLink to="/submit" onClick={closeMenu}>
-                Submit
-              </NavLink>
-            )}
             {user && (
               <NavLink to="/my-submissions" onClick={closeMenu}>
                 My Submissions
@@ -57,6 +49,9 @@ export default function Header() {
           </div>
 
           <div className="nav-auth">
+            <NavLink to="/about" onClick={closeMenu}>
+              About Thomassons
+            </NavLink>
             {user ? (
               <>
                 <span className="nav-username">{user.username}</span>

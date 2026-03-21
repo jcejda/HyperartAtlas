@@ -1,7 +1,8 @@
 import { useState, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import { post } from '../api/client';
+import { useAuth } from '../context/AuthContext';
 import categories from '../utils/categories';
 import './SubmitPage.css';
 
@@ -16,6 +17,21 @@ function LocationPicker({ position, setPosition }) {
 }
 
 export default function SubmitPage() {
+  const { user } = useAuth();
+
+  if (!user) {
+    return (
+      <div className="submit-page container">
+        <h1>Submit a Thomasson</h1>
+        <p>You need to be logged in to submit a Thomasson sighting.</p>
+        <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem' }}>
+          <Link to="/login" className="btn btn-primary">Log in</Link>
+          <Link to="/signup" className="btn">Sign up</Link>
+        </div>
+      </div>
+    );
+  }
+
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
