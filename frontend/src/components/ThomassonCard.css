@@ -1,0 +1,74 @@
+.thomasson-card {
+  font-family: var(--font-body);
+}
+
+.thomasson-card-image {
+  width: 100%;
+  height: 140px;
+  overflow: hidden;
+  border-radius: 2px;
+  margin-bottom: 0.5rem;
+  background: var(--color-bg-tertiary);
+}
+
+.thomasson-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thomasson-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.thomasson-card-title {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: bold;
+  margin: 0;
+  border: none;
+  padding: 0;
+  line-height: 1.3;
+}
+
+.category-badge {
+  display: inline-block;
+  width: fit-content;
+  padding: 0.1rem 0.45rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #fff;
+  border-radius: 10px;
+  text-transform: capitalize;
+}
+
+.thomasson-card-meta {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--color-text-light);
+}
+
+.thomasson-card-link {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+
+/* Override Leaflet popup styles for cleaner look */
+.thomasson-popup .leaflet-popup-content-wrapper {
+  border-radius: 3px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 0;
+}
+
+.thomasson-popup .leaflet-popup-content {
+  margin: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.thomasson-popup .leaflet-popup-tip {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
