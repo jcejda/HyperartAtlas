@@ -199,6 +199,29 @@ def reject_submission(
     return _thomasson_to_detail(thomasson)
 
 
+@router.delete("/submissions/{thomasson_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_submission(
+    thomasson_id: str,
+    db: DbSession,
+    admin: AdminUser,
+):
+    """Permanently delete a submission and its photos (admin only)."""
+    thomasson = (
+        db.query(Thomasson)
+        .options(joinedload(Thomasson.photos))
+        .filter(Thomasson.id == thomasson_id)
+        .first()
+    )
+    if not thomasson:
+        raise HTTPException(status_code=404, detail="Submission not found")
+
+    for photo in thomasson.photos:
+        db.delete(photo)
+    db.delete(thomasson)
+    db.commit()
+    return None
+
+
 @router.get("/users", response_model=List[UserListResponse])
 def list_users(
     db: DbSession,
