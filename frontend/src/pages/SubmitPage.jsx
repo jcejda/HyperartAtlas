@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, LayersControl, Marker, useMapEvents } from 'react-leaflet';
 import { post } from '../api/client';
 import { useAuth } from '../context/AuthContext';
 import categories from '../utils/categories';
@@ -240,10 +240,20 @@ export default function SubmitPage() {
                   className="picker-map"
                   scrollWheelZoom={true}
                 >
-                  <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  />
+                  <LayersControl position="topright">
+                    <LayersControl.BaseLayer checked name="Street">
+                      <TileLayer
+                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      />
+                    </LayersControl.BaseLayer>
+                    <LayersControl.BaseLayer name="Satellite">
+                      <TileLayer
+                        attribution='Tiles &copy; Esri'
+                        url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}"
+                      />
+                    </LayersControl.BaseLayer>
+                  </LayersControl>
                   <LocationPicker position={position} setPosition={handlePositionFromMap} />
                 </MapContainer>
               </div>

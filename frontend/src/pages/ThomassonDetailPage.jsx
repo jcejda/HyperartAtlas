@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import { MapContainer, TileLayer, LayersControl, Marker } from 'react-leaflet';
 import { get } from '../api/client';
 import { getCategoryByValue } from '../utils/categories';
 import './ThomassonDetailPage.css';
@@ -67,7 +67,7 @@ export default function ThomassonDetailPage() {
   }
 
   const category = getCategoryByValue(thomasson.category);
-  const title = thomasson.title || 'Untitled Thomasson';
+  const title = thomasson.title || '';
   const photos = thomasson.photos || [];
   const date = thomasson.created_at
     ? new Date(thomasson.created_at).toLocaleDateString('en-US', {
@@ -184,7 +184,14 @@ export default function ThomassonDetailPage() {
                 zoomControl={true}
                 attributionControl={false}
               >
-                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                <LayersControl position="topright">
+                  <LayersControl.BaseLayer checked name="Street">
+                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                  </LayersControl.BaseLayer>
+                  <LayersControl.BaseLayer name="Satellite">
+                    <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" />
+                  </LayersControl.BaseLayer>
+                </LayersControl>
                 <Marker position={[thomasson.latitude, thomasson.longitude]} />
               </MapContainer>
             </div>

@@ -4,7 +4,7 @@ import '../ThomassonCard.css';
 
 export default function ThomassonCard({ thomasson }) {
   const category = getCategoryByValue(thomasson.category);
-  const title = thomasson.title || 'Untitled Thomasson';
+  const title = thomasson.title || '';
   const dateSource = thomasson.discovery_date || thomasson.created_at;
   const dateLabel = thomasson.discovery_date ? 'Discovered' : 'Cataloged';
   const date = dateSource
@@ -24,13 +24,7 @@ export default function ThomassonCard({ thomasson }) {
       )}
       <div className="thomasson-card-body">
         <h3 className="thomasson-card-title">{title}</h3>
-        <span
-          className="category-badge"
-          style={{ backgroundColor: category.color }}
-        >
-          {category.label}
-        </span>
-        <div className="thomasson-card-meta">
+<div className="thomasson-card-meta">
           {thomasson.username && (
             <span className="meta-user">by {thomasson.username}</span>
           )}
