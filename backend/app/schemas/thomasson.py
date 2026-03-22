@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from typing import List, Optional
 
 from pydantic import BaseModel, Field
@@ -25,6 +25,7 @@ class ThomassonMapItem(BaseModel):
     longitude: float
     primary_photo_url: Optional[str]
     username: str
+    discovery_date: Optional[date]
     created_at: datetime
 
 
@@ -43,6 +44,7 @@ class ThomassonDetail(BaseModel):
     review_note: Optional[str]
     reviewed_at: Optional[datetime]
     photos: List[PhotoResponse]
+    discovery_date: Optional[date]
     created_at: datetime
     updated_at: datetime
 
@@ -54,6 +56,7 @@ class ThomassonSubmission(BaseModel):
     category: str
     latitude: float = Field(ge=-90, le=90)
     longitude: float = Field(ge=-180, le=180)
+    discovery_date: Optional[date] = None
 
 
 class ThomassonUpdate(BaseModel):

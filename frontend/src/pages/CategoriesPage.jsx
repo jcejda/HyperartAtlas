@@ -4,9 +4,17 @@ import categories from '../utils/categories';
 import './AboutPage.css';
 
 import pureImg from '../assets/categories/pure.jpeg';
+import doorwayImg from '../assets/categories/doorway.jpg';
+import staircaseImg from '../assets/categories/staircase.png';
+import abombImg from '../assets/categories/abomb.jpg';
+import outieImg from '../assets/categories/outie.jpg';
 
 const categoryImages = {
   pure: pureImg,
+  useless_doorway: doorwayImg,
+  pure_staircase: staircaseImg,
+  a_bomb: abombImg,
+  outie: outieImg,
 };
 
 const categoryDescriptions = {
@@ -72,21 +80,16 @@ export default function CategoriesPage() {
                 <div className="category-text">
                   <p>{desc}</p>
                 </div>
-                <div className="category-image-placeholder">
-                  {categoryImages[cat.value] ? (
+                {categoryImages[cat.value] && (
+                  <div className="category-image-placeholder">
                     <img
                       className="category-example-img"
                       src={categoryImages[cat.value]}
                       alt={`${cat.label} example`}
                       onClick={() => setLightboxImg({ src: categoryImages[cat.value], alt: `${cat.label} example` })}
                     />
-                  ) : (
-                    <div className="placeholder-box">
-                      <span className="placeholder-label">{cat.label} example</span>
-                      <span className="placeholder-subtext">Image placeholder</span>
-                    </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </section>
           );

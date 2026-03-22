@@ -7,8 +7,7 @@ export default function ContactPage() {
 
       <section className="contact-body">
         <p>
-          HyperartAtlas is a community-driven project to catalog Hyperart Thomassons -- useless
-          architectural relics -- from around the world. If you have questions, suggestions,
+          HyperartAtlas is a community-driven project to catalog Hyperart Thomassons from around the world. If you have questions, suggestions,
           or feedback about the project, feel free to reach out.
         </p>
 
@@ -19,17 +18,6 @@ export default function ContactPage() {
             <a href="mailto:cejdajackson@gmail.com">cejdajackson@gmail.com</a>
           </p>
         </div>
-
-        <p>
-          If you&apos;d like to contribute Thomasson sightings, you can do so directly through
-          the site by creating an account and submitting your findings. All submissions are
-          reviewed by moderators to maintain quality.
-        </p>
-
-        <p>
-          We welcome contributions from Thomasson enthusiasts, urban explorers, architectural
-          historians, and anyone with an eye for the beautifully useless.
-        </p>
       </section>
     </div>
   );

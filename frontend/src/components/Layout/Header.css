@@ -96,6 +96,12 @@
   height: 100%;
 }
 
+.nav-auth .btn-primary,
+.nav-auth .btn-primary:visited,
+.nav-auth .btn-primary:active {
+  color: #fff;
+}
+
 .nav-link-right {
   display: flex;
   align-items: center;

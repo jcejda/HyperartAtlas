@@ -1,3 +1,4 @@
+from datetime import date
 from typing import List, Optional
 
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Query, status
@@ -32,6 +33,7 @@ def _thomasson_to_map_item(t: Thomasson) -> ThomassonMapItem:
         longitude=t.longitude,
         primary_photo_url=primary.file_url if primary else None,
         username=t.submitter.username,
+        discovery_date=t.discovery_date,
         created_at=t.created_at,
     )
 
@@ -52,6 +54,7 @@ def _thomasson_to_detail(t: Thomasson) -> ThomassonDetail:
         review_note=t.review_note,
         reviewed_at=t.reviewed_at,
         photos=[PhotoResponse.model_validate(p) for p in t.photos],
+        discovery_date=t.discovery_date,
         created_at=t.created_at,
         updated_at=t.updated_at,
     )
@@ -144,6 +147,7 @@ def create_thomasson(
     latitude: float = Form(..., ge=-90, le=90),
     longitude: float = Form(..., ge=-180, le=180),
     title: Optional[str] = Form(None),
+    discovery_date: Optional[date] = Form(None),
     photos: List[UploadFile] = File(default=[]),
 ):
     """Submit a new thomasson sighting with optional photos."""
@@ -165,6 +169,7 @@ def create_thomasson(
         category=category,
         latitude=latitude,
         longitude=longitude,
+        discovery_date=discovery_date,
         submitted_by=current_user.id,
     )
     db.add(thomasson)
