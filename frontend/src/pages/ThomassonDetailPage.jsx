@@ -163,7 +163,13 @@ export default function ThomassonDetailPage() {
                 <tr>
                   <th>Coordinates</th>
                   <td>
-                    {thomasson.latitude.toFixed(4)}, {thomasson.longitude.toFixed(4)}
+                    <a
+                      href={`https://www.google.com/maps?q=${thomasson.latitude},${thomasson.longitude}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {thomasson.latitude.toFixed(4)}, {thomasson.longitude.toFixed(4)}
+                    </a>
                   </td>
                 </tr>
               </tbody>
