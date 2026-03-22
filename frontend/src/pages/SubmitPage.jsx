@@ -48,6 +48,7 @@ export default function SubmitPage() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
+  const [discoveryDate, setDiscoveryDate] = useState('');
   const [position, setPosition] = useState(null);
   const [latInput, setLatInput] = useState('');
   const [lngInput, setLngInput] = useState('');
@@ -134,6 +135,7 @@ export default function SubmitPage() {
     formData.append('category', category);
     formData.append('latitude', lat);
     formData.append('longitude', lng);
+    if (discoveryDate) formData.append('discovery_date', discoveryDate);
     files.forEach((file) => formData.append('photos', file));
 
     setSubmitting(true);
@@ -195,6 +197,17 @@ export default function SubmitPage() {
               </option>
             ))}
           </select>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="discovery-date">Date of Discovery</label>
+          <input
+            id="discovery-date"
+            type="date"
+            value={discoveryDate}
+            onChange={(e) => setDiscoveryDate(e.target.value)}
+            max={new Date().toISOString().split('T')[0]}
+          />
         </div>
 
         <fieldset className="location-fieldset">

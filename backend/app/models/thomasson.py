@@ -1,9 +1,9 @@
 import enum
 import uuid
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from typing import Optional
 
-from sqlalchemy import String, Text, Float, Boolean, Integer, Enum, DateTime, ForeignKey
+from sqlalchemy import String, Text, Float, Boolean, Integer, Enum, DateTime, Date, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -44,6 +44,7 @@ class Thomasson(Base):
     category: Mapped[str] = mapped_column(String(50), nullable=False)
     latitude: Mapped[float] = mapped_column(Float, nullable=False)
     longitude: Mapped[float] = mapped_column(Float, nullable=False)
+    discovery_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)
     status: Mapped[ThomassonStatus] = mapped_column(
         Enum(ThomassonStatus), default=ThomassonStatus.PENDING_REVIEW, nullable=False
     )

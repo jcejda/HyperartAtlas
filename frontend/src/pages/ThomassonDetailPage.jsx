@@ -130,6 +130,12 @@ export default function ThomassonDetailPage() {
                     <td>{thomasson.submitter_username}</td>
                   </tr>
                 )}
+                {thomasson.discovery_date && (
+                  <tr>
+                    <th>Date of Discovery</th>
+                    <td>{new Date(thomasson.discovery_date + 'T00:00:00').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</td>
+                  </tr>
+                )}
                 {date && (
                   <tr>
                     <th>Date Cataloged</th>

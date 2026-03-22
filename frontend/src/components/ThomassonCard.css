@@ -7,6 +7,7 @@
   height: 140px;
   overflow: hidden;
   border-radius: 2px;
+  margin-top: 0.25rem;
   margin-bottom: 0.5rem;
   background: var(--color-bg-tertiary);
 }
@@ -65,8 +66,27 @@
 }
 
 .thomasson-popup .leaflet-popup-content {
-  margin: 0.75rem;
+  margin: 0;
+  padding: 0.75rem;
   font-size: 0.85rem;
+}
+
+.thomasson-popup .leaflet-popup-close-button {
+  top: -10px !important;
+  right: -10px !important;
+  z-index: 10;
+  background: #fff;
+  border: 1px solid #a2a9b1;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  line-height: 1;
+  color: #333;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .thomasson-popup .leaflet-popup-tip {
