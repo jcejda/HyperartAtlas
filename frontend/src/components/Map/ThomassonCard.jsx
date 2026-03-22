@@ -5,8 +5,10 @@ import '../ThomassonCard.css';
 export default function ThomassonCard({ thomasson }) {
   const category = getCategoryByValue(thomasson.category);
   const title = thomasson.title || 'Untitled Thomasson';
-  const date = thomasson.created_at
-    ? new Date(thomasson.created_at).toLocaleDateString('en-US', {
+  const dateSource = thomasson.discovery_date || thomasson.created_at;
+  const dateLabel = thomasson.discovery_date ? 'Discovered' : 'Cataloged';
+  const date = dateSource
+    ? new Date(thomasson.discovery_date ? dateSource + 'T00:00:00' : dateSource).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'short',
         day: 'numeric',
@@ -32,7 +34,7 @@ export default function ThomassonCard({ thomasson }) {
           {thomasson.username && (
             <span className="meta-user">by {thomasson.username}</span>
           )}
-          {date && <span className="meta-date">{date}</span>}
+          {date && <span className="meta-date">{dateLabel} {date}</span>}
         </div>
         <Link to={`/thomasson/${thomasson.id}`} className="thomasson-card-link">
           View Details &rarr;

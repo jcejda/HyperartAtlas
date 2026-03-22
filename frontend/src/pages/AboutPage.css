@@ -57,6 +57,12 @@
   margin-bottom: 0;
 }
 
+.category-attribution {
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
 .category-image-placeholder {
   flex-shrink: 0;
   width: 180px;

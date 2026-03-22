@@ -17,6 +17,10 @@ const categoryImages = {
   outie: outieImg,
 };
 
+const categoryAttributions = {
+  pure: { text: 'Example image from', label: 'Kaifu Station (Wikipedia)', url: 'https://en.wikipedia.org/wiki/Kaifu_Station' },
+};
+
 const categoryDescriptions = {
   pure:
     'An uncategorizable object whose use it is impossible to fathom. For example, the Pure Shutters, which open to reveal a blank wall, and the Pure Tunnel that exists without a surrounding hill.',
@@ -79,6 +83,16 @@ export default function CategoriesPage() {
               <div className="category-content">
                 <div className="category-text">
                   <p>{desc}</p>
+                  {categoryAttributions[cat.value] && (
+                    <p className="category-attribution">
+                      <em>
+                        {categoryAttributions[cat.value].text}{' '}
+                        <a href={categoryAttributions[cat.value].url} target="_blank" rel="noopener noreferrer">
+                          {categoryAttributions[cat.value].label}
+                        </a>.
+                      </em>
+                    </p>
+                  )}
                 </div>
                 {categoryImages[cat.value] && (
                   <div className="category-image-placeholder">
