@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import { get } from '../api/client';
@@ -12,6 +12,24 @@ export default function ThomassonDetailPage() {
   const [error, setError] = useState(null);
   const [selectedPhoto, setSelectedPhoto] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  const photoCount = thomasson?.photos?.length || 0;
+
+  const handleKeyDown = useCallback((e) => {
+    if (photoCount <= 1) return;
+    if (e.key === 'ArrowLeft') {
+      setSelectedPhoto((prev) => (prev - 1 + photoCount) % photoCount);
+    } else if (e.key === 'ArrowRight') {
+      setSelectedPhoto((prev) => (prev + 1) % photoCount);
+    } else if (e.key === 'Escape' && lightboxOpen) {
+      setLightboxOpen(false);
+    }
+  }, [photoCount, lightboxOpen]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
 
   useEffect(() => {
     async function fetchDetail() {

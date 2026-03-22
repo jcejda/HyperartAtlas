@@ -34,6 +34,7 @@ def _thomasson_to_detail(t: Thomasson) -> ThomassonDetail:
         review_note=t.review_note,
         reviewed_at=t.reviewed_at,
         photos=[PhotoResponse.model_validate(p) for p in t.photos],
+        discovery_date=t.discovery_date,
         created_at=t.created_at,
         updated_at=t.updated_at,
     )
