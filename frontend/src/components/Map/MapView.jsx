@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, LayersControl } from 'react-leaflet';
+import { MapContainer, TileLayer, LayersControl, Rectangle } from 'react-leaflet';
 import L from 'leaflet';
 import ThomassonMarker from './ThomassonMarker';
 import { get } from '../../api/client';
@@ -46,7 +46,7 @@ export default function MapView() {
       <MapContainer
         center={[20, 0]}
         zoom={2}
-        minZoom={1}
+        minZoom={2}
         maxBounds={[[-85, -180], [85, 180]]}
         maxBoundsViscosity={1.0}
         className="map-container"
@@ -76,6 +76,17 @@ export default function MapView() {
             />
           </LayersControl.BaseLayer>
         </LayersControl>
+        {/* White overlays to mask "Map data not yet available" beyond world edges */}
+        <Rectangle
+          bounds={[[-90, -360], [90, -180]]}
+          pathOptions={{ color: 'white', fillColor: 'white', fillOpacity: 1, stroke: false }}
+          interactive={false}
+        />
+        <Rectangle
+          bounds={[[-90, 180], [90, 360]]}
+          pathOptions={{ color: 'white', fillColor: 'white', fillOpacity: 1, stroke: false }}
+          interactive={false}
+        />
         {thomassons.map((t) => (
           <ThomassonMarker key={t.id} thomasson={t} />
         ))}
