@@ -1,13 +1,20 @@
 import { useState, useEffect, useCallback } from 'react';
-import { get, post, put } from '../api/client';
+import { get, post, put, del } from '../api/client';
 import { getCategoryByValue } from '../utils/categories';
 import categories from '../utils/categories';
 import './AdminDashboard.css';
+
+const STATUS_TABS = [
+  { key: 'pending_review', label: 'Pending Review' },
+  { key: 'approved', label: 'Approved' },
+  { key: 'rejected', label: 'Rejected' },
+];
 
 export default function AdminDashboard() {
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState('pending_review');
   const [expandedId, setExpandedId] = useState(null);
   const [detail, setDetail] = useState(null);
   const [detailLoading, setDetailLoading] = useState(false);
@@ -15,9 +22,15 @@ export default function AdminDashboard() {
   const [editFields, setEditFields] = useState({});
   const [actionLoading, setActionLoading] = useState(false);
   const [actionMessage, setActionMessage] = useState('');
+  const [confirmDelete, setConfirmDelete] = useState(null);
 
-  const fetchSubmissions = useCallback(async () => {
-    const { data, error: err } = await get('/admin/submissions');
+  const fetchSubmissions = useCallback(async (status) => {
+    setLoading(true);
+    setError(null);
+    setExpandedId(null);
+    setDetail(null);
+    setActionMessage('');
+    const { data, error: err } = await get(`/admin/submissions?status=${status}`);
     if (err) {
       setError(err);
     } else {
@@ -27,8 +40,12 @@ export default function AdminDashboard() {
   }, []);
 
   useEffect(() => {
-    fetchSubmissions();
-  }, [fetchSubmissions]);
+    fetchSubmissions(activeTab);
+  }, [activeTab, fetchSubmissions]);
+
+  const handleTabChange = (key) => {
+    setActiveTab(key);
+  };
 
   const handleExpand = async (id) => {
     if (expandedId === id) {
@@ -42,6 +59,7 @@ export default function AdminDashboard() {
     setDetailLoading(true);
     setRejectNote('');
     setActionMessage('');
+    setConfirmDelete(null);
 
     const { data, error: err } = await get(`/admin/submissions/${id}`);
     setDetailLoading(false);
@@ -112,20 +130,53 @@ export default function AdminDashboard() {
     }
   };
 
-  if (loading) {
-    return <div className="loading">Loading submissions...</div>;
-  }
+  const handleDelete = async (id) => {
+    if (confirmDelete !== id) {
+      setConfirmDelete(id);
+      return;
+    }
+
+    setActionLoading(true);
+    setActionMessage('');
+
+    const { error: err } = await del(`/admin/submissions/${id}`);
+    setActionLoading(false);
+
+    if (err) {
+      setActionMessage(`Error deleting: ${err}`);
+    } else {
+      setActionMessage('Submission deleted.');
+      setSubmissions((prev) => prev.filter((s) => s.id !== id));
+      setExpandedId(null);
+      setDetail(null);
+    }
+    setConfirmDelete(null);
+  };
 
   return (
     <div className="admin-dashboard content-container">
       <h1>Admin Dashboard</h1>
-      <p className="admin-subtitle">Review pending Thomasson submissions.</p>
+      <p className="admin-subtitle">Manage Thomasson submissions.</p>
+
+      <div className="admin-tabs">
+        {STATUS_TABS.map((tab) => (
+          <button
+            key={tab.key}
+            className={`admin-tab ${activeTab === tab.key ? 'admin-tab--active' : ''}`}
+            onClick={() => handleTabChange(tab.key)}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
 
       {error && <div className="error-message">{error}</div>}
 
-      {submissions.length === 0 && !error ? (
+      {loading ? (
+        <div className="loading">Loading submissions...</div>
+      ) : submissions.length === 0 && !error ? (
         <div className="empty-state">
-          <p>No pending submissions to review.</p>
+          <p>No {STATUS_TABS.find((t) => t.key === activeTab)?.label.toLowerCase()} submissions.</p>
         </div>
       ) : (
         <div className="admin-submissions">
@@ -148,9 +199,9 @@ export default function AdminDashboard() {
                   onClick={() => handleExpand(s.id)}
                 >
                   <div className="admin-submission-left">
-                    {s.primary_photo_url && (
+                    {s.photos?.[0]?.file_url && (
                       <img
-                        src={s.primary_photo_url}
+                        src={s.photos[0].file_url}
                         alt=""
                         className="admin-thumb"
                       />
@@ -164,8 +215,8 @@ export default function AdminDashboard() {
                         >
                           {cat.label}
                         </span>
-                        {s.submitted_by_username && (
-                          <span className="meta-user">by {s.submitted_by_username}</span>
+                        {s.submitter_username && (
+                          <span className="meta-user">by {s.submitter_username}</span>
                         )}
                         {date && <span className="meta-date">{date}</span>}
                       </span>
@@ -193,76 +244,135 @@ export default function AdminDashboard() {
                           </div>
                         )}
 
-                        <div className="admin-edit-section">
-                          <h3>Edit before approving</h3>
-                          <div className="form-group">
-                            <label>Title</label>
-                            <input
-                              type="text"
-                              value={editFields.title}
-                              onChange={(e) =>
-                                setEditFields((prev) => ({ ...prev, title: e.target.value }))
-                              }
-                            />
-                          </div>
-                          <div className="form-group">
-                            <label>Description</label>
-                            <textarea
-                              value={editFields.description}
-                              onChange={(e) =>
-                                setEditFields((prev) => ({ ...prev, description: e.target.value }))
-                              }
-                            />
-                          </div>
-                          <div className="form-group">
-                            <label>Category</label>
-                            <select
-                              value={editFields.category}
-                              onChange={(e) =>
-                                setEditFields((prev) => ({ ...prev, category: e.target.value }))
-                              }
-                            >
-                              {categories.map((c) => (
-                                <option key={c.value} value={c.value}>
-                                  {c.label}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
+                        {activeTab === 'pending_review' && (
+                          <div className="admin-edit-section">
+                            <h3>Edit before approving</h3>
+                            <div className="form-group">
+                              <label>Title</label>
+                              <input
+                                type="text"
+                                value={editFields.title}
+                                onChange={(e) =>
+                                  setEditFields((prev) => ({ ...prev, title: e.target.value }))
+                                }
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label>Description</label>
+                              <textarea
+                                value={editFields.description}
+                                onChange={(e) =>
+                                  setEditFields((prev) => ({ ...prev, description: e.target.value }))
+                                }
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label>Category</label>
+                              <select
+                                value={editFields.category}
+                                onChange={(e) =>
+                                  setEditFields((prev) => ({ ...prev, category: e.target.value }))
+                                }
+                              >
+                                {categories.map((c) => (
+                                  <option key={c.value} value={c.value}>
+                                    {c.label}
+                                  </option>
+                                ))}
+                              </select>
+                            </div>
 
-                          <div className="admin-location">
-                            <strong>Location:</strong>{' '}
-                            {detail.latitude?.toFixed(4)}, {detail.longitude?.toFixed(4)}
+                            <div className="admin-location">
+                              <strong>Location:</strong>{' '}
+                              {detail.latitude?.toFixed(4)}, {detail.longitude?.toFixed(4)}
+                            </div>
                           </div>
-                        </div>
+                        )}
+
+                        {activeTab !== 'pending_review' && (
+                          <div className="admin-readonly-info">
+                            <div className="admin-location">
+                              <strong>Location:</strong>{' '}
+                              {detail.latitude?.toFixed(4)}, {detail.longitude?.toFixed(4)}
+                            </div>
+                            {detail.description && (
+                              <div className="admin-description">
+                                <strong>Description:</strong>
+                                <p>{detail.description}</p>
+                              </div>
+                            )}
+                            {detail.review_note && (
+                              <div className="admin-review-note">
+                                <strong>Review note:</strong>
+                                <p>{detail.review_note}</p>
+                              </div>
+                            )}
+                            {detail.reviewer_username && (
+                              <div className="admin-reviewer">
+                                <strong>Reviewed by:</strong> {detail.reviewer_username}
+                                {detail.reviewed_at && (
+                                  <span> on {new Date(detail.reviewed_at).toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: 'short',
+                                    day: 'numeric',
+                                  })}</span>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        )}
 
                         <div className="admin-actions">
-                          <div className="admin-actions-row">
-                            <button
-                              className="btn btn-success"
-                              onClick={() => handleApprove(s.id)}
-                              disabled={actionLoading}
-                            >
-                              {actionLoading ? 'Processing...' : 'Approve'}
-                            </button>
-                          </div>
+                          {activeTab === 'pending_review' && (
+                            <>
+                              <div className="admin-actions-row">
+                                <button
+                                  className="btn btn-success"
+                                  onClick={() => handleApprove(s.id)}
+                                  disabled={actionLoading}
+                                >
+                                  {actionLoading ? 'Processing...' : 'Approve'}
+                                </button>
+                              </div>
 
-                          <div className="admin-reject-section">
-                            <label className="reject-label">Rejection note:</label>
-                            <textarea
-                              className="reject-textarea"
-                              value={rejectNote}
-                              onChange={(e) => setRejectNote(e.target.value)}
-                              placeholder="Reason for rejection (required)..."
-                              rows={2}
-                            />
+                              <div className="admin-reject-section">
+                                <label className="reject-label">Rejection note:</label>
+                                <textarea
+                                  className="reject-textarea"
+                                  value={rejectNote}
+                                  onChange={(e) => setRejectNote(e.target.value)}
+                                  placeholder="Reason for rejection (required)..."
+                                  rows={2}
+                                />
+                                <button
+                                  className="btn btn-danger"
+                                  onClick={() => handleReject(s.id)}
+                                  disabled={actionLoading}
+                                >
+                                  Reject
+                                </button>
+                              </div>
+                            </>
+                          )}
+
+                          <div className="admin-delete-section">
                             <button
                               className="btn btn-danger"
-                              onClick={() => handleReject(s.id)}
+                              onClick={() => handleDelete(s.id)}
                               disabled={actionLoading}
                             >
-                              Reject
+                              {confirmDelete === s.id
+                                ? 'Click again to confirm deletion'
+                                : 'Delete Submission'}
                             </button>
+                            {confirmDelete === s.id && (
+                              <button
+                                className="btn btn-secondary"
+                                onClick={() => setConfirmDelete(null)}
+                              >
+                                Cancel
+                              </button>
+                            )}
                           </div>
                         </div>
 

@@ -11,6 +11,7 @@ export default function ThomassonDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedPhoto, setSelectedPhoto] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   useEffect(() => {
     async function fetchDetail() {
@@ -72,7 +73,7 @@ export default function ThomassonDetailPage() {
 
           {photos.length > 0 && (
             <div className="detail-gallery">
-              <div className="gallery-main">
+              <div className="gallery-main" onClick={() => setLightboxOpen(true)} style={{ cursor: 'pointer' }}>
                 <img
                   src={photos[selectedPhoto]?.file_url || photos[selectedPhoto]}
                   alt={`${title} - photo ${selectedPhoto + 1}`}
@@ -160,6 +161,41 @@ export default function ThomassonDetailPage() {
           </div>
         </aside>
       </div>
+
+      {lightboxOpen && (
+        <div className="lightbox-overlay" onClick={() => setLightboxOpen(false)}>
+          <button className="lightbox-close" onClick={() => setLightboxOpen(false)}>&times;</button>
+          {photos.length > 1 && (
+            <button
+              className="lightbox-nav lightbox-prev"
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedPhoto((prev) => (prev - 1 + photos.length) % photos.length);
+              }}
+            >
+              &#8249;
+            </button>
+          )}
+          <img
+            className="lightbox-image"
+            src={photos[selectedPhoto]?.file_url || photos[selectedPhoto]}
+            alt={`${title} - photo ${selectedPhoto + 1}`}
+            onClick={(e) => e.stopPropagation()}
+          />
+          {photos.length > 1 && (
+            <button
+              className="lightbox-nav lightbox-next"
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedPhoto((prev) => (prev + 1) % photos.length);
+              }}
+            >
+              &#8250;
+            </button>
+          )}
+          <div className="lightbox-counter">{selectedPhoto + 1} / {photos.length}</div>
+        </div>
+      )}
     </div>
   );
 }
