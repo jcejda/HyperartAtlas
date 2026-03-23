@@ -1,3 +1,4 @@
+import io
 import os
 import uuid
 from abc import ABC, abstractmethod
@@ -7,6 +8,7 @@ import boto3
 from fastapi import UploadFile
 
 from app.config import settings
+from app.services.image_processing import process_image
 
 
 class StorageBackend(ABC):
@@ -20,8 +22,7 @@ class StorageBackend(ABC):
         """Delete a file by its key."""
         pass
 
-    def _generate_key(self, filename: str, folder: str) -> str:
-        ext = os.path.splitext(filename)[1].lower() if filename else ".jpg"
+    def _generate_key(self, folder: str, ext: str = ".jpg") -> str:
         unique_name = f"{uuid.uuid4().hex}{ext}"
         return f"{folder}/{unique_name}"
 
@@ -32,13 +33,15 @@ class LocalStorage(StorageBackend):
         self.upload_dir.mkdir(parents=True, exist_ok=True)
 
     def upload(self, file: UploadFile, folder: str = "thomassons") -> tuple[str, str]:
-        file_key = self._generate_key(file.filename, folder)
+        raw_bytes = file.file.read()
+        processed_bytes, content_type, ext = process_image(raw_bytes, file.content_type)
+
+        file_key = self._generate_key(folder, ext)
         file_path = self.upload_dir / file_key
         file_path.parent.mkdir(parents=True, exist_ok=True)
 
-        contents = file.file.read()
         with open(file_path, "wb") as f:
-            f.write(contents)
+            f.write(processed_bytes)
 
         file_url = f"{settings.BASE_URL}/uploads/{file_key}"
         return file_key, file_url
@@ -67,11 +70,12 @@ class S3Storage(StorageBackend):
         self.bucket = settings.S3_BUCKET
 
     def upload(self, file: UploadFile, folder: str = "thomassons") -> tuple[str, str]:
-        file_key = self._generate_key(file.filename, folder)
+        raw_bytes = file.file.read()
+        processed_bytes, content_type, ext = process_image(raw_bytes, file.content_type)
 
-        content_type = file.content_type or "application/octet-stream"
+        file_key = self._generate_key(folder, ext)
         self.s3.upload_fileobj(
-            file.file,
+            io.BytesIO(processed_bytes),
             self.bucket,
             file_key,
             ExtraArgs={"ContentType": content_type},

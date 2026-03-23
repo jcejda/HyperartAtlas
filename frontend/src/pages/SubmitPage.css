@@ -99,6 +99,28 @@
   object-fit: cover;
 }
 
+.preview-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-secondary);
+}
+
+.preview-placeholder-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.preview-placeholder-text {
+  font-size: 0.55rem;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+
 .preview-remove {
   position: absolute;
   top: 2px;

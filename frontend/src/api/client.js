@@ -80,10 +80,30 @@ async function request(endpoint, options = {}) {
 
     if (!res.ok) {
       const detail = data?.detail;
-    const message =
-        (typeof detail === 'string' ? detail : null) ||
-        data?.message ||
-        (typeof data === 'string' ? data : `Request failed with status ${res.status}`);
+      let message;
+      if (typeof detail === 'string') {
+        message = detail;
+      } else if (Array.isArray(detail)) {
+        // FastAPI validation errors - convert to user-friendly messages
+        const friendlyMessages = {
+          'string_too_short': (field, ctx) => `${field} must have at least ${ctx?.min_length || 10} characters`,
+          'string_too_long': (field, ctx) => `${field} must be ${ctx?.max_length || 5000} characters or fewer`,
+          'missing': (field) => `${field} is required`,
+          'value_error': (field, ctx, msg) => `${field}: ${msg}`,
+        };
+        message = detail.map(e => {
+          const rawField = e.loc ? e.loc[e.loc.length - 1] : '';
+          const field = rawField
+            ? rawField.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+            : 'Field';
+          const friendly = friendlyMessages[e.type];
+          if (friendly) return friendly(field, e.ctx, e.msg);
+          return `${field}: ${e.msg}`;
+        }).join('; ');
+      } else {
+        message = data?.message || (typeof data === 'string' ? data : `Request failed with status ${res.status}`);
+      }
+      console.error('API error:', res.status, data);
       return { data: null, error: message };
     }
 

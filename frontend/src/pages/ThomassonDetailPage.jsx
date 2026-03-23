@@ -16,13 +16,15 @@ export default function ThomassonDetailPage() {
   const photoCount = thomasson?.photos?.length || 0;
 
   const handleKeyDown = useCallback((e) => {
+    if (e.key === 'Escape' && lightboxOpen) {
+      setLightboxOpen(false);
+      return;
+    }
     if (photoCount <= 1) return;
     if (e.key === 'ArrowLeft') {
       setSelectedPhoto((prev) => (prev - 1 + photoCount) % photoCount);
     } else if (e.key === 'ArrowRight') {
       setSelectedPhoto((prev) => (prev + 1) % photoCount);
-    } else if (e.key === 'Escape' && lightboxOpen) {
-      setLightboxOpen(false);
     }
   }, [photoCount, lightboxOpen]);
 
