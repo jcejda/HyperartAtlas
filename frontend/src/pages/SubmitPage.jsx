@@ -6,6 +6,11 @@ import { useAuth } from '../context/AuthContext';
 import categories from '../utils/categories';
 import './SubmitPage.css';
 
+function isHeicFile(file) {
+  return ['image/heic', 'image/heif'].includes(file.type)
+    || /\.hei[cf]$/i.test(file.name);
+}
+
 function LocationPicker({ position, setPosition }) {
   useMapEvents({
     click(e) {
@@ -84,7 +89,9 @@ export default function SubmitPage() {
     const newFiles = [...files, ...selected];
     setFiles(newFiles);
 
-    const newPreviews = selected.map((file) => URL.createObjectURL(file));
+    const newPreviews = selected.map((file) =>
+      isHeicFile(file) ? null : URL.createObjectURL(file)
+    );
     setPreviews((prev) => [...prev, ...newPreviews]);
     setError('');
   };
@@ -101,14 +108,17 @@ export default function SubmitPage() {
 
     if (!description.trim()) {
       setError('Description is required.');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
     if (!category) {
       setError('Please select a category.');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
     if (files.length === 0) {
       setError('At least one photo is required.');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
 
@@ -116,6 +126,7 @@ export default function SubmitPage() {
     if (locationMode === 'map') {
       if (!position) {
         setError('Please click on the map to set a location.');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
       lat = position[0];
@@ -125,6 +136,7 @@ export default function SubmitPage() {
       lng = parseFloat(lngInput);
       if (isNaN(lat) || isNaN(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
         setError('Please enter valid coordinates (lat: -90 to 90, lng: -180 to 180).');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
     }
@@ -144,6 +156,7 @@ export default function SubmitPage() {
 
     if (submitError) {
       setError(submitError);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
       navigate('/my-submissions', { replace: true });
     }
@@ -327,7 +340,14 @@ export default function SubmitPage() {
             <div className="photo-previews">
               {previews.map((src, i) => (
                 <div key={i} className="preview-thumb">
-                  <img src={src} alt={`Preview ${i + 1}`} />
+                  {src ? (
+                    <img src={src} alt={`Preview ${i + 1}`} />
+                  ) : (
+                    <div className="preview-placeholder">
+                      <span className="preview-placeholder-icon">&#128247;</span>
+                      <span className="preview-placeholder-text">{files[i]?.name?.split('.').pop().toUpperCase()}</span>
+                    </div>
+                  )}
                   <button
                     type="button"
                     className="preview-remove"

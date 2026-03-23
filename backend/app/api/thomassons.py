@@ -20,7 +20,11 @@ router = APIRouter(prefix="/api/thomassons", tags=["thomassons"])
 
 MAX_PHOTOS = 10
 MAX_PHOTO_SIZE = 10 * 1024 * 1024  # 10 MB
-ALLOWED_CONTENT_TYPES = {"image/jpeg", "image/png", "image/webp", "image/heic"}
+ALLOWED_CONTENT_TYPES = {
+    "image/jpeg", "image/png", "image/webp",
+    "image/heic", "image/heif",
+    "image/tiff", "image/bmp", "image/x-ms-bmp",
+}
 
 
 def _thomasson_to_map_item(t: Thomasson) -> ThomassonMapItem:
@@ -147,10 +151,21 @@ def create_thomasson(
     latitude: float = Form(..., ge=-90, le=90),
     longitude: float = Form(..., ge=-180, le=180),
     title: Optional[str] = Form(None),
-    discovery_date: Optional[date] = Form(None),
+    discovery_date: Optional[str] = Form(None),
     photos: List[UploadFile] = File(default=[]),
 ):
     """Submit a new thomasson sighting with optional photos."""
+    # Parse discovery_date from string (empty string = None)
+    parsed_discovery_date = None
+    if discovery_date and discovery_date.strip():
+        try:
+            parsed_discovery_date = date.fromisoformat(discovery_date.strip())
+        except ValueError:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail="Invalid date format. Use YYYY-MM-DD.",
+            )
+
     if category not in THOMASSON_CATEGORIES:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -169,7 +184,7 @@ def create_thomasson(
         category=category,
         latitude=latitude,
         longitude=longitude,
-        discovery_date=discovery_date,
+        discovery_date=parsed_discovery_date,
         submitted_by=current_user.id,
     )
     db.add(thomasson)
@@ -180,7 +195,7 @@ def create_thomasson(
         if photo_file.content_type and photo_file.content_type not in ALLOWED_CONTENT_TYPES:
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail=f"File type {photo_file.content_type} not allowed. Use JPEG, PNG, or WebP.",
+                detail=f"File type {photo_file.content_type} not allowed. Use JPEG, PNG, WebP, HEIC, TIFF, or BMP.",
             )
 
         file_key, file_url = storage.upload(photo_file, folder=f"thomassons/{thomasson.id}")
