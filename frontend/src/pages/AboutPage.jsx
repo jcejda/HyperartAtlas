@@ -22,13 +22,11 @@ export default function AboutPage() {
 
   return (
     <div className="about-page content-container">
-      <h1>About Hyperart Thomassons</h1>
-
       <section className="about-intro">
         <blockquote className="about-quote">
           <p>
-            "Art is something the artist sets out to make. But hyperart is something a hyperartist
-            makes unconsciously — without any idea they are doing so. A work of hyperart can have
+            "Art is something an artist sets out to make. But hyperart is something a hyperartist
+            makes unconsciously — without any idea that they are doing so. A work of hyperart can have
             an assistant, but not a creator.{' '}
             <strong>In the end, all hyperart has is the person who discovers it.</strong>"
           </p>
