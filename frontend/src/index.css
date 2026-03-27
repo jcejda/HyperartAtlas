@@ -249,7 +249,9 @@ input, textarea, select {
   text-decoration: none;
 }
 
-.btn-primary {
+.btn-primary,
+.btn-primary:visited,
+.btn-primary:active {
   background: var(--color-link);
   color: #fff;
   border-color: var(--color-link);

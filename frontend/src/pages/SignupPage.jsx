@@ -49,7 +49,7 @@ export default function SignupPage() {
       <div className="auth-form-container">
         <h1>Create account</h1>
         <p className="auth-subtitle">
-          Join HyperartAtlas to submit Thomasson sightings from around the world.
+          Join Hyperart Atlas to submit Thomasson sightings from around the world.
         </p>
 
         {error && <div className="error-message">{error}</div>}

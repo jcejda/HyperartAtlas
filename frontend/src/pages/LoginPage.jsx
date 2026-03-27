@@ -39,7 +39,7 @@ export default function LoginPage() {
       <div className="auth-form-container">
         <h1>Log in</h1>
         <p className="auth-subtitle">
-          Welcome back to HyperartAtlas. Log in to submit and manage your Thomasson sightings.
+          Welcome back to Hyperart Atlas. Log in to submit and manage your Thomasson sightings.
         </p>
 
         {error && <div className="error-message">{error}</div>}
