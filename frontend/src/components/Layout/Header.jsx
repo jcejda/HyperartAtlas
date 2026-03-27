@@ -21,7 +21,7 @@ export default function Header() {
     <header className="header">
       <div className="header-inner container">
         <Link to="/" className="header-logo" onClick={closeMenu}>
-          <span className="logo-text">HyperartAtlas</span>
+          <span className="logo-text">Hyperart Atlas</span>
         </Link>
 
         <button

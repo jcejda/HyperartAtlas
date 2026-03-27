@@ -10,6 +10,53 @@
   line-height: 1.7;
 }
 
+.about-quote {
+  border-left: 3px solid var(--color-border);
+  margin: 1.5rem 0;
+  padding: 0.75rem 1.25rem;
+  background: var(--color-bg-secondary);
+  font-style: italic;
+  line-height: 1.7;
+}
+
+.about-quote p {
+  margin: 0;
+}
+
+.japanese {
+  font-style: normal;
+}
+
+.about-photo-placeholder {
+  margin: 1.25rem auto;
+  max-width: 400px;
+}
+
+.about-photo {
+  margin: 1.25rem auto;
+  max-width: 400px;
+}
+
+.about-photo-img {
+  width: 100%;
+  border-radius: 2px;
+  border: 1px solid var(--color-border-light);
+}
+
+.about-divider {
+  border: none;
+  border-top: 1px solid var(--color-border);
+  margin: 2rem 0;
+}
+
+.about-mission {
+  margin-bottom: 1.5rem;
+}
+
+.about-mission p {
+  line-height: 1.7;
+}
+
 .categories-intro {
   color: var(--color-text-secondary);
   margin-bottom: 1rem;
@@ -106,7 +153,20 @@
 }
 
 .about-cta {
+  margin-bottom: 1.5rem;
+}
+
+.about-further-reading {
   margin-bottom: 1rem;
+}
+
+.about-further-reading ul {
+  padding-left: 1.5rem;
+  line-height: 1.7;
+}
+
+.about-further-reading li {
+  margin-bottom: 0.5rem;
 }
 
 .about-cta p {

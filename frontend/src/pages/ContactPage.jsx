@@ -7,7 +7,7 @@ export default function ContactPage() {
 
       <section className="contact-body">
         <p>
-          HyperartAtlas is a community-driven project to catalog Hyperart Thomassons from around the world. If you have questions, suggestions,
+          Hyperart Atlas is a community-driven project to catalog Hyperart Thomassons from around the world. If you have questions, suggestions,
           or feedback about the project, feel free to reach out.
         </p>
 

@@ -43,8 +43,8 @@ export default function SubmitPage() {
         <h1>Submit a Thomasson</h1>
         <p>You need to be logged in to submit a Thomasson sighting.</p>
         <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem' }}>
-          <Link to="/login" className="btn btn-primary">Log in</Link>
-          <Link to="/signup" className="btn">Sign up</Link>
+          <Link to="/login" className="btn">Log in</Link>
+          <Link to="/signup" className="btn btn-primary">Sign up</Link>
         </div>
       </div>
     );
