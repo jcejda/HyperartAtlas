@@ -121,6 +121,7 @@ export default function AboutPage() {
         <ul>
           <li><a href="https://kaya.com/books/hyperart-thomasson/" target="_blank" rel="noopener noreferrer"><em>Hyperart: Thomasson</em></a> — the original book by Genpei Akasegawa, published by Kaya Press and translated to English by Matt Fargo</li>
           <li><a href="https://99percentinvisible.org/episode/thomassons/" target="_blank" rel="noopener noreferrer">Thomassons</a> — an episode of the <em>99% Invisible</em> podcast about Hyperart</li>
+          <li><a href="https://en.wikipedia.org/wiki/Hyperart_Thomasson" target="_blank" rel="noopener noreferrer">Hyperart Thomasson</a> — Wikipedia article</li>
         </ul>
       </section>
 

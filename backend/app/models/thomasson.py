@@ -41,7 +41,7 @@ class Thomasson(Base):
     )
     title: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
     description: Mapped[str] = mapped_column(Text, nullable=False)
-    category: Mapped[str] = mapped_column(String(50), nullable=False)
+    category: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     latitude: Mapped[float] = mapped_column(Float, nullable=False)
     longitude: Mapped[float] = mapped_column(Float, nullable=False)
     discovery_date: Mapped[Optional[date]] = mapped_column(Date, nullable=True)

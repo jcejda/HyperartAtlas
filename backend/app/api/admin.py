@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException, Query, status
 from sqlalchemy.orm import joinedload
 
 from app.core.deps import DbSession, ModeratorUser, AdminUser
-from app.models.thomasson import Thomasson, ThomassonStatus, THOMASSON_CATEGORIES
+from app.models.thomasson import Thomasson, ThomassonStatus
 from app.models.user import User, UserRole
 from app.schemas.thomasson import (
     ThomassonDetail,
@@ -23,7 +23,6 @@ def _thomasson_to_detail(t: Thomasson) -> ThomassonDetail:
         id=t.id,
         title=t.title,
         description=t.description,
-        category=t.category,
         latitude=t.latitude,
         longitude=t.longitude,
         status=t.status,
@@ -118,12 +117,6 @@ def update_submission(
     )
     if not thomasson:
         raise HTTPException(status_code=404, detail="Submission not found")
-
-    if data.category and data.category not in THOMASSON_CATEGORIES:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail=f"Invalid category. Must be one of: {', '.join(THOMASSON_CATEGORIES)}",
-        )
 
     update_data = data.model_dump(exclude_unset=True)
     for field, value in update_data.items():
