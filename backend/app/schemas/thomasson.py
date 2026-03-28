@@ -20,7 +20,6 @@ class ThomassonMapItem(BaseModel):
     """Lightweight representation for map pins."""
     id: str
     title: Optional[str]
-    category: str
     latitude: float
     longitude: float
     primary_photo_url: Optional[str]
@@ -33,7 +32,6 @@ class ThomassonDetail(BaseModel):
     id: str
     title: Optional[str]
     description: str
-    category: str
     latitude: float
     longitude: float
     status: ThomassonStatus
@@ -53,7 +51,6 @@ class ThomassonSubmission(BaseModel):
     """Used for validation; actual endpoint uses Form params."""
     title: Optional[str] = None
     description: str = Field(min_length=10, max_length=5000)
-    category: str
     latitude: float = Field(ge=-90, le=90)
     longitude: float = Field(ge=-180, le=180)
     discovery_date: Optional[date] = None
@@ -62,7 +59,6 @@ class ThomassonSubmission(BaseModel):
 class ThomassonUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = Field(default=None, min_length=10, max_length=5000)
-    category: Optional[str] = None
     latitude: Optional[float] = Field(default=None, ge=-90, le=90)
     longitude: Optional[float] = Field(default=None, ge=-180, le=180)
 
@@ -70,7 +66,6 @@ class ThomassonUpdate(BaseModel):
 class ThomassonMySubmission(BaseModel):
     id: str
     title: Optional[str]
-    category: str
     latitude: float
     longitude: float
     status: ThomassonStatus
@@ -83,7 +78,6 @@ class ThomassonMySubmission(BaseModel):
 class AdminSubmissionUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = Field(default=None, min_length=10, max_length=5000)
-    category: Optional[str] = None
     latitude: Optional[float] = Field(default=None, ge=-90, le=90)
     longitude: Optional[float] = Field(default=None, ge=-180, le=180)
 

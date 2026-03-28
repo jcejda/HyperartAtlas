@@ -81,6 +81,26 @@
   margin-bottom: 0.75rem;
 }
 
+.category-section h4 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.category-subtypes {
+  margin-left: 1.5rem;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.category-subtype {
+  border: none;
+  background: none;
+  padding: 0.5rem 1rem;
+}
+
 .category-japanese {
   font-style: italic;
   color: var(--color-text-secondary);

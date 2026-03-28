@@ -3,7 +3,6 @@ import { useNavigate, Link } from 'react-router-dom';
 import { MapContainer, TileLayer, LayersControl, Marker, useMapEvents } from 'react-leaflet';
 import { post } from '../api/client';
 import { useAuth } from '../context/AuthContext';
-import categories from '../utils/categories';
 import './SubmitPage.css';
 
 function isHeicFile(file) {
@@ -52,7 +51,6 @@ export default function SubmitPage() {
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
   const [discoveryDate, setDiscoveryDate] = useState('');
   const [position, setPosition] = useState(null);
   const [latInput, setLatInput] = useState('');
@@ -111,11 +109,6 @@ export default function SubmitPage() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
-    if (!category) {
-      setError('Please select a category.');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
-    }
     if (files.length === 0) {
       setError('At least one photo is required.');
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -144,7 +137,6 @@ export default function SubmitPage() {
     const formData = new FormData();
     if (title.trim()) formData.append('title', title.trim());
     formData.append('description', description.trim());
-    formData.append('category', category);
     formData.append('latitude', lat);
     formData.append('longitude', lng);
     if (discoveryDate) formData.append('discovery_date', discoveryDate);
@@ -192,23 +184,6 @@ export default function SubmitPage() {
             placeholder="Describe what you found, where it is, and why it qualifies as a Thomasson..."
             required
           />
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="category">Category *</label>
-          <select
-            id="category"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-            required
-          >
-            <option value="">Select a category...</option>
-            {categories.map((c) => (
-              <option key={c.value} value={c.value}>
-                {c.label}
-              </option>
-            ))}
-          </select>
         </div>
 
         <div className="form-group">

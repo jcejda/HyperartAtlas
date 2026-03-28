@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { get } from '../api/client';
-import { getCategoryByValue } from '../utils/categories';
 import './MySubmissionsPage.css';
 
 export default function MySubmissionsPage() {
@@ -45,7 +44,6 @@ export default function MySubmissionsPage() {
             <thead>
               <tr>
                 <th>Title</th>
-                <th>Category</th>
                 <th>Status</th>
                 <th>Date</th>
                 <th></th>
@@ -53,7 +51,6 @@ export default function MySubmissionsPage() {
             </thead>
             <tbody>
               {submissions.map((s) => {
-                const cat = getCategoryByValue(s.category);
                 const title = s.title || 'Untitled';
                 const date = s.created_at
                   ? new Date(s.created_at).toLocaleDateString('en-US', {
@@ -74,14 +71,6 @@ export default function MySubmissionsPage() {
                         />
                       )}
                       <span>{title}</span>
-                    </td>
-                    <td>
-                      <span
-                        className="category-badge"
-                        style={{ backgroundColor: cat.color }}
-                      >
-                        {cat.label}
-                      </span>
                     </td>
                     <td>
                       <span className={`badge badge-${s.status || 'pending'}`}>

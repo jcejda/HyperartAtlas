@@ -1,7 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
 import { get, post, put, del } from '../api/client';
-import { getCategoryByValue } from '../utils/categories';
-import categories from '../utils/categories';
 import './AdminDashboard.css';
 
 const STATUS_TABS = [
@@ -71,7 +69,6 @@ export default function AdminDashboard() {
       setEditFields({
         title: data.title || '',
         description: data.description || '',
-        category: data.category || '',
       });
     }
   };
@@ -80,11 +77,10 @@ export default function AdminDashboard() {
     setActionLoading(true);
     setActionMessage('');
 
-    if (editFields.title !== detail.title || editFields.description !== detail.description || editFields.category !== detail.category) {
+    if (editFields.title !== detail.title || editFields.description !== detail.description) {
       const { error: editErr } = await put(`/admin/submissions/${id}`, {
         title: editFields.title,
         description: editFields.description,
-        category: editFields.category,
       });
       if (editErr) {
         setActionMessage(`Error updating fields: ${editErr}`);
@@ -181,7 +177,6 @@ export default function AdminDashboard() {
       ) : (
         <div className="admin-submissions">
           {submissions.map((s) => {
-            const cat = getCategoryByValue(s.category);
             const title = s.title || 'Untitled';
             const date = s.created_at
               ? new Date(s.created_at).toLocaleDateString('en-US', {
@@ -209,12 +204,6 @@ export default function AdminDashboard() {
                     <div className="admin-submission-info">
                       <span className="admin-submission-title">{title}</span>
                       <span className="admin-submission-meta">
-                        <span
-                          className="category-badge"
-                          style={{ backgroundColor: cat.color }}
-                        >
-                          {cat.label}
-                        </span>
                         {s.submitter_username && (
                           <span className="meta-user">by {s.submitter_username}</span>
                         )}
@@ -266,22 +255,6 @@ export default function AdminDashboard() {
                                 }
                               />
                             </div>
-                            <div className="form-group">
-                              <label>Category</label>
-                              <select
-                                value={editFields.category}
-                                onChange={(e) =>
-                                  setEditFields((prev) => ({ ...prev, category: e.target.value }))
-                                }
-                              >
-                                {categories.map((c) => (
-                                  <option key={c.value} value={c.value}>
-                                    {c.label}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-
                             <div className="admin-location">
                               <strong>Location:</strong>{' '}
                               {detail.latitude?.toFixed(4)}, {detail.longitude?.toFixed(4)}

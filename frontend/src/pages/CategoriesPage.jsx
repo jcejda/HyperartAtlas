@@ -1,6 +1,4 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import categories from '../utils/categories';
+import { useState, useEffect } from 'react';
 import './AboutPage.css';
 
 import pureImg from '../assets/categories/pure.jpeg';
@@ -8,106 +6,184 @@ import doorwayImg from '../assets/categories/doorway.jpg';
 import staircaseImg from '../assets/categories/staircase.png';
 import abombImg from '../assets/categories/abomb.jpg';
 import outieImg from '../assets/categories/outie.jpg';
+import eaveImg from '../assets/categories/eave.jpg';
+import aerialImg from '../assets/categories/aerial.jpg';
+import atagoImg from '../assets/categories/atago.jpg';
+import abesadaImg from '../assets/categories/abesada.jpg';
 
-const categoryImages = {
-  pure: pureImg,
-  useless_doorway: doorwayImg,
-  pure_staircase: staircaseImg,
-  a_bomb: abombImg,
-  outie: outieImg,
-};
+const primaryCategories = [
+  {
+    id: 'pure',
+    name: 'Pure Type',
+    japanese: '純粋タイプ (Junsui taipu)',
+    description:
+      'An object whose use is impossible to fathom. The Pure Type is the broadest and most fundamental category of Thomasson.',
+    image: null,
+    attribution: null,
+    subtypes: [
+      {
+        id: 'pure_staircase',
+        name: 'Pure Staircase',
+        japanese: '無用階段 (Muyō kaidan)',
+        description:
+          'A staircase with no destination. The first recorded instance of Hyperart, the Yotsuya staircase, was this type.',
+        image: staircaseImg,
+      },
+      {
+        id: 'pure_doorway',
+        name: 'Pure Doorway',
+        japanese: '無用門 (Muyō mon)',
+        description:
+          'A doorway that is rendered useless by being blocked up, or failing to restrict access to the domain beyond.',
+        image: doorwayImg,
+      },
+      {
+        id: 'pure_tunnel',
+        name: 'Pure Tunnel',
+        japanese: null,
+        description:
+          'A tunnel that exists without a surrounding hill or any apparent reason for its structure.',
+        image: pureImg,
+        attribution: { text: 'See', label: 'Kaifu Station (Wikipedia)', url: 'https://en.wikipedia.org/wiki/Kaifu_Station' },
+      },
+    ],
+  },
+  {
+    id: 'aerial',
+    name: 'Aerial',
+    japanese: '高所 (Kōsho)',
+    description:
+      'An otherwise normal, purposeful object who is made purposeless by existing in the air, where it cannot reasonably be used.',
+    image: aerialImg,
+    attribution: { text: 'Image from', label: '99% Invisible', url: 'https://99percentinvisible.org/episode/thomassons/' },
+    subtypes: [],
+  },
+  {
+    id: 'eave',
+    name: 'Hisashi',
+    japanese: 'ヒサシ (Hisashi)',
+    description:
+      'Hisashi is the word for "eaves" in Japanese. This refers to eaves that no longer have a window or door underneath to protect from the rain.',
+    image: eaveImg,
+    attribution: { text: 'Image from', label: 'Kyoto Journal', url: 'https://kyotojournal.org/kyoto-notebook/kyoto-tomason-the-hunt-for-hidden-hyperart/' },
+    subtypes: [],
+  },
+  {
+    id: 'atago',
+    name: 'Atago',
+    japanese: 'アタゴ (Atago)',
+    description:
+      'A protrusion, or series of protrusions along a road with no purpose. Named by Akasegawa, when he discovered a curious set of these on a walk to Atago, Tokyo.',
+    image: atagoImg,
+    subtypes: [],
+  },
+  {
+    id: 'outie',
+    name: 'Outie',
+    japanese: 'でべそ (Debeso)',
+    description:
+      'A purposeless protrusion along a sealed up wall.',
+    image: outieImg,
+    subtypes: [],
+  },
+  {
+    id: 'atomic',
+    name: 'Atomic',
+    japanese: '原爆タイプ (Genbaku taipu)',
+    description:
+      'A 2-D Thomasson. The outline of a building that remains in silhouette on a wall, like the byproduct of the flash of an atomic bomb.',
+    image: abombImg,
+    subtypes: [],
+  },
+  {
+    id: 'abe_sada',
+    name: 'Abe Sada',
+    japanese: '阿部定 (Abe Sada)',
+    description:
+      <>An object that's been cut down from its original size, deleting its use. The name comes from <a href="https://en.wikipedia.org/wiki/Sada_Abe" target="_blank" rel="noopener noreferrer">Abe Sada</a>; a woman who famously murdered her lover and cut off his genitalia.</>,
+    image: abesadaImg,
+    subtypes: [],
+  },
+];
 
-const categoryAttributions = {
-  pure: { text: 'Example image from', label: 'Kaifu Station (Wikipedia)', url: 'https://en.wikipedia.org/wiki/Kaifu_Station' },
-};
+function CategorySection({ cat, isSubtype = false, onImageClick }) {
+  const Tag = isSubtype ? 'h4' : 'h3';
 
-const categoryDescriptions = {
-  pure:
-    'An uncategorizable object whose use it is impossible to fathom. For example, the Pure Shutters, which open to reveal a blank wall, and the Pure Tunnel that exists without a surrounding hill.',
-  pure_staircase:
-    'A staircase that only goes up and down. Most used to have a door at the top. Some pure staircases exist that were useless right from completion, due to changes or mix-ups in the design.',
-  useless_doorway:
-    'Even though it has been blocked up, a Useless Doorway still maintains the majesty of its original purpose. In other cases, a Useless Doorway exists in a place that has no need for it, with no wall or fence around it.',
-  hisashi:
-    'Hisashi is the word for "eaves" in Japanese. This refers to useless eaves: ones that no longer have a window or door underneath them to protect from the rain.',
-  useless_window:
-    'A blocked up window: one which is still beautiful due to the care taken in blocking it up.',
-  a_bomb:
-    'A 2-D Thomasson. The outline of a building that remains in silhouette on a wall. This can be seen when a section of a tightly packed row of buildings is torn down. Cases that appear due to water are known as hydrogen bombs. Cases that appear when a hoarding or sign is torn down are known as neutron bombs.',
-  elevated:
-    'These objects are normal themselves, but exist in a higher than normal place, therefore seeming strange. For example, a door with a handle on the second floor of a wall. These often appear when staircases are torn down. They can also appear when a winch or crane is kept inside the building, but a standard door is used on the outside.',
-  outie:
-    'A protrudence from a sealed up wall, such as a door knob or tap.',
-  castella:
-    'A cuboid protuberance from a wall, named after Castella, a Japanese sponge cake. For example, a blocked up window which sticks out from the wall. The opposite of this, a sunken blocked up section, is known as a Reverse Castella.',
-  atago:
-    'An object sticking out at the side of the road, with no clear purpose, possibly used to stop cars parking. The first example of this was found by Akasegawa whilst walking from Shinbashi to Atago, hence the name.',
-  live_burial:
-    'A roadside object which is partly submerged in concrete.',
-  abe_sada:
-    'The remains of a telephone pole cut down. The name refers to the Abe Sada Incident; a famous case from 1930s Japan in which a woman strangled her lover and then severed his genitalia with a kitchen knife.',
-  useless_bridge:
-    'A bridge over a filled-in river, or a bridge that has become useless. In the case of some covered drains, a bridge is still necessary for cars or heavy vehicles to cross -- in this case they could not be called Useless Bridges, as they only appear useless.',
-  uncategorized:
-    'A Thomasson that has not yet been assigned a category, or one that the submitter is unsure how to classify. If you think you know what type it is, let us know!',
-};
+  return (
+    <section
+      className={`category-section ${isSubtype ? 'category-subtype' : ''}`}
+      id={cat.id}
+    >
+      <Tag>{cat.name}</Tag>
+      {cat.japanese && (
+        <p className="category-japanese">{cat.japanese}</p>
+      )}
+      <div className="category-content">
+        <div className="category-text">
+          <p>{cat.description}</p>
+          {cat.attribution && (
+            <p className="category-attribution">
+              <em>
+                {cat.attribution.text}{' '}
+                <a href={cat.attribution.url} target="_blank" rel="noopener noreferrer">
+                  {cat.attribution.label}
+                </a>.
+              </em>
+            </p>
+          )}
+        </div>
+        {cat.image && (
+          <div className="category-image-placeholder">
+            <img
+              className="category-example-img"
+              src={cat.image}
+              alt={`${cat.name} example`}
+              onClick={() => onImageClick({ src: cat.image, alt: `${cat.name} example` })}
+            />
+          </div>
+        )}
+      </div>
+      {cat.subtypes && cat.subtypes.length > 0 && (
+        <div className="category-subtypes">
+          {cat.subtypes.map((sub) => (
+            <CategorySection
+              key={sub.id}
+              cat={sub}
+              isSubtype={true}
+              onImageClick={onImageClick}
+            />
+          ))}
+        </div>
+      )}
+    </section>
+  );
+}
 
 export default function CategoriesPage() {
   const [lightboxImg, setLightboxImg] = useState(null);
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && lightboxImg) {
+        setLightboxImg(null);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [lightboxImg]);
+
   return (
     <div className="about-page content-container">
-      <h1>Categories</h1>
       <p className="categories-intro">
         Below are some of the most common categories of Thomasson, based on the typology
-        established by Akasegawa. This is not a comprehensive list -- many more types exist and
+        established by Akasegawa. This is not a comprehensive list. Many more types exist and
         new ones continue to be identified.
       </p>
 
       <div className="category-sections">
-        {categories.map((cat) => {
-          const desc = categoryDescriptions[cat.value];
-          return (
-            <section key={cat.value} className="category-section" id={cat.value}>
-              <h3>
-                <span
-                  className="category-badge"
-                  style={{ backgroundColor: cat.color }}
-                >
-                  {cat.label}
-                </span>
-              </h3>
-              {cat.japanese && (
-                <p className="category-japanese">{cat.japanese}</p>
-              )}
-              <div className="category-content">
-                <div className="category-text">
-                  <p>{desc}</p>
-                  {categoryAttributions[cat.value] && (
-                    <p className="category-attribution">
-                      <em>
-                        {categoryAttributions[cat.value].text}{' '}
-                        <a href={categoryAttributions[cat.value].url} target="_blank" rel="noopener noreferrer">
-                          {categoryAttributions[cat.value].label}
-                        </a>.
-                      </em>
-                    </p>
-                  )}
-                </div>
-                {categoryImages[cat.value] && (
-                  <div className="category-image-placeholder">
-                    <img
-                      className="category-example-img"
-                      src={categoryImages[cat.value]}
-                      alt={`${cat.label} example`}
-                      onClick={() => setLightboxImg({ src: categoryImages[cat.value], alt: `${cat.label} example` })}
-                    />
-                  </div>
-                )}
-              </div>
-            </section>
-          );
-        })}
+        {primaryCategories.map((cat) => (
+          <CategorySection key={cat.id} cat={cat} onImageClick={setLightboxImg} />
+        ))}
       </div>
 
       {lightboxImg && (

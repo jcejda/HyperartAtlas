@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { MapContainer, TileLayer, LayersControl, Marker } from 'react-leaflet';
 import { get } from '../api/client';
-import { getCategoryByValue } from '../utils/categories';
 import './ThomassonDetailPage.css';
 
 export default function ThomassonDetailPage() {
@@ -68,7 +67,6 @@ export default function ThomassonDetailPage() {
     );
   }
 
-  const category = getCategoryByValue(thomasson.category);
   const title = thomasson.title || '';
   const photos = thomasson.photos || [];
   const date = thomasson.created_at
@@ -131,19 +129,6 @@ export default function ThomassonDetailPage() {
             <div className="infobox-header">{title}</div>
             <table className="infobox-table">
               <tbody>
-                <tr>
-                  <th>Category</th>
-                  <td>
-                    <Link to={`/categories#${thomasson.category}`} className="category-badge-link">
-                      <span
-                        className="category-badge"
-                        style={{ backgroundColor: category.color }}
-                      >
-                        {category.label}
-                      </span>
-                    </Link>
-                  </td>
-                </tr>
                 {thomasson.submitter_username && (
                   <tr>
                     <th>Submitted by</th>
