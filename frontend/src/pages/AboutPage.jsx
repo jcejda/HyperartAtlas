@@ -34,7 +34,7 @@ export default function AboutPage() {
 
         <p>
           The term "Hyperart Thomasson" was coined by Japanese artist Genpei Akasegawa (
-          <span className="japanese">赤瀬川原平</span>), in the January 1983 edition of the{' '}
+          <span className="japanese">赤瀬川原平</span>) in the January 1983 edition of the{' '}
           <em>Shashin Jidai</em> (<span className="japanese">写真時代</span>, or "Super Photo Age")
           magazine.
         </p>
@@ -52,7 +52,7 @@ export default function AboutPage() {
           A handful of stairs, a landing, but no discernible destination. The stairs had once
           connected to a doorway, long since removed, leaving behind a structure stripped of its
           original purpose. What struck Akasegawa most was not the absence, but the care. The
-          handrail had been recently repaired, maintained despite serving no function at all.
+          handrail had been recently repaired despite serving no function at all.
         </p>
 
         <p>
