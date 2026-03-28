@@ -166,8 +166,7 @@ export default function SubmitPage() {
     <div className="submit-page content-container">
       <h1>Submit a Thomasson</h1>
       <p className="submit-intro">
-        Found a useless architectural relic? Share it with the world. Your submission will be
-        reviewed by a moderator before appearing on the map.
+        Think you found Hyperart in the wild? Add it to the map.
       </p>
 
       {error && <div className="error-message">{error}</div>}
@@ -180,7 +179,7 @@ export default function SubmitPage() {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="e.g., Staircase to Nowhere on 5th Ave"
+            placeholder="e.g., Pure staircase in Yotsuya, Tokyo"
           />
         </div>
 
@@ -245,7 +244,7 @@ export default function SubmitPage() {
 
           {locationMode === 'map' && (
             <div className="location-map-picker">
-              <p className="hint">Click on the map to place a pin at the Thomasson location.</p>
+              <p className="hint">Click on the map to place a pin at the Thomasson's location.</p>
               <div className="picker-map-container">
                 <MapContainer
                   center={position || [35.68, 139.76]}
