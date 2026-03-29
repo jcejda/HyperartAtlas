@@ -65,6 +65,51 @@
   font-weight: 600;
 }
 
+.action-message {
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  background: var(--color-bg-secondary);
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.submission-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.delete-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.btn-delete-submission {
+  background: none;
+  border: none;
+  color: #c0392b;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.2rem 0.4rem;
+  border-radius: 3px;
+}
+
+.btn-delete-submission:hover {
+  background: #fde8e8;
+}
+
+.btn-cancel-delete {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.4rem;
+}
+
 @media (max-width: 768px) {
   .submissions-table th:nth-child(4),
   .submissions-table td:nth-child(4) {

@@ -249,7 +249,7 @@ def delete_thomasson(
     db: DbSession,
     current_user: CurrentUser,
 ):
-    """Delete own submission (only if still pending)."""
+    """Delete own submission."""
     thomasson = (
         db.query(Thomasson)
         .options(joinedload(Thomasson.photos))
@@ -260,8 +260,6 @@ def delete_thomasson(
         raise HTTPException(status_code=404, detail="Thomasson not found")
     if thomasson.submitted_by != current_user.id:
         raise HTTPException(status_code=403, detail="Not your submission")
-    if thomasson.status != ThomassonStatus.PENDING_REVIEW:
-        raise HTTPException(status_code=400, detail="Can only delete pending submissions")
 
     storage = get_storage()
     for photo in thomasson.photos:
