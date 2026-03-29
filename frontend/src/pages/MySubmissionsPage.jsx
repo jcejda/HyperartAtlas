@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { get } from '../api/client';
+import { get, del } from '../api/client';
 import './MySubmissionsPage.css';
 
 export default function MySubmissionsPage() {
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(null);
+  const [actionMessage, setActionMessage] = useState(null);
 
   useEffect(() => {
     async function fetchSubmissions() {
@@ -21,6 +23,22 @@ export default function MySubmissionsPage() {
     fetchSubmissions();
   }, []);
 
+  const handleDelete = async (id) => {
+    if (confirmDelete !== id) {
+      setConfirmDelete(id);
+      return;
+    }
+    const { error: err } = await del(`/thomassons/${id}`);
+    if (err) {
+      setActionMessage(`Error deleting: ${err}`);
+    } else {
+      setSubmissions((prev) => prev.filter((s) => s.id !== id));
+      setActionMessage('Submission deleted.');
+    }
+    setConfirmDelete(null);
+    setTimeout(() => setActionMessage(null), 3000);
+  };
+
   if (loading) {
     return <div className="loading">Loading submissions...</div>;
   }
@@ -29,6 +47,7 @@ export default function MySubmissionsPage() {
     <div className="my-submissions-page content-container">
       <h1>My Submissions</h1>
 
+      {actionMessage && <div className="action-message">{actionMessage}</div>}
       {error && <div className="error-message">{error}</div>}
 
       {submissions.length === 0 && !error ? (
@@ -79,9 +98,27 @@ export default function MySubmissionsPage() {
                     </td>
                     <td className="submission-date">{date}</td>
                     <td>
-                      <Link to={`/thomasson/${s.id}`} className="view-link">
-                        View
-                      </Link>
+                      <div className="submission-actions">
+                        <Link to={`/thomasson/${s.id}`} className="view-link">
+                          View
+                        </Link>
+                        <span className="delete-action">
+                          <button
+                            className="btn-delete-submission"
+                            onClick={() => handleDelete(s.id)}
+                          >
+                            {confirmDelete === s.id ? 'Confirm Delete' : 'Delete'}
+                          </button>
+                          {confirmDelete === s.id && (
+                            <button
+                              className="btn-cancel-delete"
+                              onClick={() => setConfirmDelete(null)}
+                            >
+                              Cancel
+                            </button>
+                          )}
+                        </span>
+                      </div>
                     </td>
                   </tr>
                 );

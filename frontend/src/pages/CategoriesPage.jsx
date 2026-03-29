@@ -17,7 +17,7 @@ const primaryCategories = [
     name: 'Pure Type',
     japanese: '純粋タイプ (Junsui taipu)',
     description:
-      'An object whose use is impossible to fathom. The Pure Type is the broadest and most fundamental category of Thomasson.',
+      'An object whose use is impossible to fathom. The Pure Type is the broadest and most fundamental category of Thomasson. Some examples include',
     image: null,
     attribution: null,
     subtypes: [

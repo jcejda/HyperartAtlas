@@ -51,7 +51,7 @@ export default function AboutPage() {
         <p>
           A handful of stairs, a landing, but no discernible destination. The stairs had once
           connected to a doorway, long since removed, leaving behind a structure stripped of its
-          original purpose. What struck Akasegawa most was not the absence, but the care. The
+          original purpose. What struck Akasegawa most was not the absence, but the care taken to preserve it. The
           handrail had been recently repaired despite serving no function at all.
         </p>
 
