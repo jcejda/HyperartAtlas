@@ -19,6 +19,7 @@ class PhotoResponse(BaseModel):
 class ThomassonMapItem(BaseModel):
     """Lightweight representation for map pins."""
     id: str
+    serial_id: Optional[int]
     title: Optional[str]
     latitude: float
     longitude: float
@@ -30,6 +31,7 @@ class ThomassonMapItem(BaseModel):
 
 class ThomassonDetail(BaseModel):
     id: str
+    serial_id: Optional[int]
     title: Optional[str]
     description: str
     latitude: float
@@ -65,6 +67,7 @@ class ThomassonUpdate(BaseModel):
 
 class ThomassonMySubmission(BaseModel):
     id: str
+    serial_id: Optional[int]
     title: Optional[str]
     latitude: float
     longitude: float

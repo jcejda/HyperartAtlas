@@ -39,6 +39,7 @@ class Thomasson(Base):
     id: Mapped[str] = mapped_column(
         String(36), primary_key=True, default=lambda: str(uuid.uuid4())
     )
+    serial_id: Mapped[Optional[int]] = mapped_column(Integer, nullable=True, unique=True, index=True)
     title: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
     description: Mapped[str] = mapped_column(Text, nullable=False)
     category: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)

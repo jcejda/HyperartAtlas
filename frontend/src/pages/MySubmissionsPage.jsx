@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { get, del } from '../api/client';
+import { getThomassonUrl } from '../utils/thomassonUrl';
 import './MySubmissionsPage.css';
 
 export default function MySubmissionsPage() {
@@ -99,7 +100,7 @@ export default function MySubmissionsPage() {
                     <td className="submission-date">{date}</td>
                     <td>
                       <div className="submission-actions">
-                        <Link to={`/thomasson/${s.id}`} className="view-link">
+                        <Link to={getThomassonUrl(s)} className="view-link">
                           View
                         </Link>
                         <span className="delete-action">

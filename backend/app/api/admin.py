@@ -21,6 +21,7 @@ router = APIRouter(prefix="/api/admin", tags=["admin"])
 def _thomasson_to_detail(t: Thomasson) -> ThomassonDetail:
     return ThomassonDetail(
         id=t.id,
+        serial_id=t.serial_id,
         title=t.title,
         description=t.description,
         latitude=t.latitude,

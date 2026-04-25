@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useMap } from 'react-leaflet';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
 import L from 'leaflet';
 import 'leaflet.markercluster';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
@@ -36,11 +35,7 @@ export default function MarkerCluster({ thomassons }) {
 
       const container = document.createElement('div');
       const root = createRoot(container);
-      root.render(
-        <BrowserRouter>
-          <ThomassonCard thomasson={thomasson} />
-        </BrowserRouter>
-      );
+      root.render(<ThomassonCard thomasson={thomasson} />);
       rootsRef.current.push(root);
 
       marker.bindPopup(container, {
