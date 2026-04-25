@@ -32,6 +32,29 @@
   font-style: italic;
 }
 
+/* Cluster icons styled to match Leaflet's default blue marker */
+.marker-cluster-blue {
+  background-color: rgba(33, 100, 200, 0.25);
+  border-radius: 50%;
+}
+
+.marker-cluster-blue .marker-cluster-inner {
+  width: 30px;
+  height: 30px;
+  margin: 5px;
+  border-radius: 50%;
+  background-color: rgba(33, 100, 200, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.marker-cluster-blue .marker-cluster-inner span {
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+}
+
 .map-error-banner {
   position: absolute;
   top: 60px;

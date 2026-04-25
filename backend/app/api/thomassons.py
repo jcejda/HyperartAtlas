@@ -4,7 +4,7 @@ from typing import List, Optional
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Query, status
 from sqlalchemy.orm import Session, joinedload
 
-from app.core.deps import DbSession, CurrentUser
+from app.core.deps import DbSession, CurrentUser, OptionalUser
 from app.models.thomasson import Thomasson, ThomassonStatus, Photo
 from app.models.user import User
 from app.schemas.thomasson import (
@@ -117,8 +117,8 @@ def list_my_submissions(
 
 
 @router.get("/{thomasson_id}", response_model=ThomassonDetail)
-def get_thomasson(thomasson_id: str, db: DbSession):
-    """Get full detail of an approved thomasson."""
+def get_thomasson(thomasson_id: str, db: DbSession, current_user: OptionalUser = None):
+    """Get full detail of a thomasson. Approved submissions are public; pending/rejected are only visible to the submitter or moderators/admins."""
     thomasson = (
         db.query(Thomasson)
         .options(
@@ -132,7 +132,12 @@ def get_thomasson(thomasson_id: str, db: DbSession):
     if not thomasson:
         raise HTTPException(status_code=404, detail="Thomasson not found")
     if thomasson.status != ThomassonStatus.APPROVED:
-        raise HTTPException(status_code=404, detail="Thomasson not found")
+        if current_user is None:
+            raise HTTPException(status_code=404, detail="Thomasson not found")
+        is_owner = thomasson.submitted_by == current_user.id
+        is_staff = current_user.role in ("moderator", "admin")
+        if not is_owner and not is_staff:
+            raise HTTPException(status_code=404, detail="Thomasson not found")
     return _thomasson_to_detail(thomasson)
 
 

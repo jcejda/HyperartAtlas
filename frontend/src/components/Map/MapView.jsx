@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, LayersControl, Rectangle } from 'react-leaflet';
+import { useEffect, useRef, useState } from 'react';
+import { MapContainer, TileLayer, LayersControl, Rectangle, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import MarkerCluster from './MarkerCluster';
 import { get } from '../../api/client';
@@ -16,6 +16,22 @@ L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,
   shadowUrl: markerShadow,
 });
+
+function SetViewOnLoad({ thomassons }) {
+  const map = useMap();
+  const hasSet = useRef(false);
+
+  useEffect(() => {
+    if (!hasSet.current && thomassons.length > 0) {
+      const avgLat = thomassons.reduce((sum, t) => sum + t.latitude, 0) / thomassons.length;
+      const avgLng = thomassons.reduce((sum, t) => sum + t.longitude, 0) / thomassons.length;
+      map.setView([avgLat, avgLng], map.getZoom());
+      hasSet.current = true;
+    }
+  }, [thomassons, map]);
+
+  return null;
+}
 
 export default function MapView() {
   const [thomassons, setThomassons] = useState([]);
@@ -88,6 +104,7 @@ export default function MapView() {
           interactive={false}
         />
         <MarkerCluster thomassons={thomassons} />
+        <SetViewOnLoad thomassons={thomassons} />
       </MapContainer>
     </div>
   );
