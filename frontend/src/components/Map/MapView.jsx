@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, LayersControl, Rectangle } from 'react-leaflet';
 import L from 'leaflet';
-import ThomassonMarker from './ThomassonMarker';
+import MarkerCluster from './MarkerCluster';
 import { get } from '../../api/client';
 import './MapView.css';
 
@@ -45,7 +45,7 @@ export default function MapView() {
       )}
       <MapContainer
         center={[20, 0]}
-        zoom={2}
+        zoom={3}
         minZoom={2}
         maxBounds={[[-85, -180], [85, 180]]}
         maxBoundsViscosity={1.0}
@@ -87,9 +87,7 @@ export default function MapView() {
           pathOptions={{ color: 'white', fillColor: 'white', fillOpacity: 1, stroke: false }}
           interactive={false}
         />
-        {thomassons.map((t) => (
-          <ThomassonMarker key={t.id} thomasson={t} />
-        ))}
+        <MarkerCluster thomassons={thomassons} />
       </MapContainer>
     </div>
   );
