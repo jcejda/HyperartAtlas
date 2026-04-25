@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
 import { getCategoryByValue } from '../../utils/categories';
+import { getThomassonUrl } from '../../utils/thomassonUrl';
 import '../ThomassonCard.css';
 
 export default function ThomassonCard({ thomasson }) {
@@ -30,9 +30,9 @@ export default function ThomassonCard({ thomasson }) {
           )}
           {date && <span className="meta-date">{dateLabel} {date}</span>}
         </div>
-        <Link to={`/thomasson/${thomasson.id}`} className="thomasson-card-link">
+        <a href={getThomassonUrl(thomasson)} className="thomasson-card-link">
           View Details &rarr;
-        </Link>
+        </a>
       </div>
     </div>
   );

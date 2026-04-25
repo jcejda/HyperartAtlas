@@ -2,6 +2,7 @@ from datetime import date
 from typing import List, Optional
 
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Query, status
+from sqlalchemy import func
 from sqlalchemy.orm import Session, joinedload
 
 from app.core.deps import DbSession, CurrentUser, OptionalUser
@@ -18,6 +19,11 @@ from app.services.storage import get_storage
 
 router = APIRouter(prefix="/api/thomassons", tags=["thomassons"])
 
+
+def next_serial_id(db: Session) -> int:
+    max_id = db.query(func.max(Thomasson.serial_id)).scalar() or 0
+    return max_id + 1
+
 MAX_PHOTOS = 10
 MAX_PHOTO_SIZE = 10 * 1024 * 1024  # 10 MB
 ALLOWED_CONTENT_TYPES = {
@@ -31,6 +37,7 @@ def _thomasson_to_map_item(t: Thomasson) -> ThomassonMapItem:
     primary = t.primary_photo
     return ThomassonMapItem(
         id=t.id,
+        serial_id=t.serial_id,
         title=t.title,
         latitude=t.latitude,
         longitude=t.longitude,
@@ -44,6 +51,7 @@ def _thomasson_to_map_item(t: Thomasson) -> ThomassonMapItem:
 def _thomasson_to_detail(t: Thomasson) -> ThomassonDetail:
     return ThomassonDetail(
         id=t.id,
+        serial_id=t.serial_id,
         title=t.title,
         description=t.description,
         latitude=t.latitude,
@@ -66,6 +74,7 @@ def _thomasson_to_my_submission(t: Thomasson) -> ThomassonMySubmission:
     primary = t.primary_photo
     return ThomassonMySubmission(
         id=t.id,
+        serial_id=t.serial_id,
         title=t.title,
         latitude=t.latitude,
         longitude=t.longitude,
@@ -116,19 +125,20 @@ def list_my_submissions(
     return [_thomasson_to_my_submission(t) for t in thomassons]
 
 
-@router.get("/{thomasson_id}", response_model=ThomassonDetail)
-def get_thomasson(thomasson_id: str, db: DbSession, current_user: OptionalUser = None):
-    """Get full detail of a thomasson. Approved submissions are public; pending/rejected are only visible to the submitter or moderators/admins."""
-    thomasson = (
-        db.query(Thomasson)
-        .options(
-            joinedload(Thomasson.submitter),
-            joinedload(Thomasson.reviewer),
-            joinedload(Thomasson.photos),
-        )
-        .filter(Thomasson.id == thomasson_id)
-        .first()
-    )
+@router.get("/{identifier}", response_model=ThomassonDetail)
+def get_thomasson(identifier: str, db: DbSession, current_user: OptionalUser = None):
+    """Get full detail of a thomasson by serial_id (integer) or UUID."""
+    opts = [
+        joinedload(Thomasson.submitter),
+        joinedload(Thomasson.reviewer),
+        joinedload(Thomasson.photos),
+    ]
+    q = db.query(Thomasson).options(*opts)
+
+    if identifier.isdigit():
+        thomasson = q.filter(Thomasson.serial_id == int(identifier)).first()
+    else:
+        thomasson = q.filter(Thomasson.id == identifier).first()
     if not thomasson:
         raise HTTPException(status_code=404, detail="Thomasson not found")
     if thomasson.status != ThomassonStatus.APPROVED:
@@ -171,6 +181,7 @@ def create_thomasson(
         )
 
     thomasson = Thomasson(
+        serial_id=next_serial_id(db),
         title=title,
         description=description,
         latitude=latitude,
